@@ -8,6 +8,7 @@
     <modules>
         <module>spark</module>
         <module>scala</module>
+        <module>spark-elasticsearch</module>
     </modules>
     <name>Examples with Scala and Spark</name>
     <description></description>
@@ -23,6 +24,7 @@
         <scala.binary.version>2.11</scala.binary.version>
         <scala.maven.plugin.version>3.2.2</scala.maven.plugin.version>
         <scalastyle.version>1.0.0</scalastyle.version>
+        <scala-logging.version>3.9.2</scala-logging.version>
 
         <spark.version>2.4.3</spark.version>
 
@@ -132,6 +134,11 @@
                 <groupId>org.scalastyle</groupId>
                 <artifactId>scalastyle_${scala.binary.version}</artifactId>
                 <version>${scalastyle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.typesafe.scala-logging</groupId>
+                <artifactId>scala-logging_${scala.binary.version}</artifactId>
+                <version>${scala-logging.version}</version>
             </dependency>
 
             <dependency>
