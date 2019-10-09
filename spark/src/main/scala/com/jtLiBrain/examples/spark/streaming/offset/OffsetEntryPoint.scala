@@ -1,6 +1,7 @@
 package com.jtLiBrain.examples.spark.streaming.offset
 
 import kafka.utils.ZkUtils
+import org.apache.kafka.common.TopicPartition
 
 class OffsetEntryPoint {
 
@@ -18,7 +19,18 @@ class OffsetEntryPoint {
                                               .get(topic).toList.head.size
 
     val persistedNumberOfPartitionsForTopic = 0
-    
+
+    // the logic get the number of partitions from external storage
+
+    val fromOffsets = collection.mutable.Map[TopicPartition,Long]()
+
+    if(persistedNumberOfPartitionsForTopic == 0) { // first run
+
+    } else if(zkNumberOfPartitionsForTopic > persistedNumberOfPartitionsForTopic) { // increase kafka partitions
+
+    } else {
+
+    }
    }  
 
   def commitOffsets(): Unit = {  
