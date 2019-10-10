@@ -5,7 +5,7 @@ import org.apache.kafka.common.TopicPartition
 
 class OffsetEntryPoint {
 
-  def getLastOffsets(topic: String): Unit = { 
+  def getLastOffsets(topic: String): Map[TopicPartition, Long] = { 
     val zkUrl: String = null
     val sessionTimeout: Int = 0
     val connectionTimeout: Int = 0
@@ -20,20 +20,39 @@ class OffsetEntryPoint {
 
     val persistedNumberOfPartitionsForTopic = 0
 
-    // the logic get the number of partitions from external storage
+    // TODO the logic get the number of partitions from external storage
 
-    val fromOffsets = collection.mutable.Map[TopicPartition,Long]()
+    val fromOffsets = collection.mutable.Map[TopicPartition, Long]()
 
-    if(persistedNumberOfPartitionsForTopic == 0) { // first run
+    if(persistedNumberOfPartitionsForTopic == 0) {
+      // streaming job is started for first run
+      for (partition <- 0 to zkNumberOfPartitionsForTopic-1)
+        fromOffsets += (new TopicPartition(topic, partition) -> 0)
+    } else if(zkNumberOfPartitionsForTopic > persistedNumberOfPartitionsForTopic) {
+      // streaming job is restarted and the number of partitions in the topic was increased
 
-    } else if(zkNumberOfPartitionsForTopic > persistedNumberOfPartitionsForTopic) { // increase kafka partitions
+      // for the original partitions
+      for (partition <- 0 to persistedNumberOfPartitionsForTopic-1) {
+        val fromOffset: Long = 0 // TODO
+        fromOffsets += (new TopicPartition(topic, partition) -> fromOffset.toLong)
+      }
 
+      // for the new increased partitions
+      for (partition <- persistedNumberOfPartitionsForTopic to zkNumberOfPartitionsForTopic-1){
+        fromOffsets += (new TopicPartition(topic, partition) -> 0)
+      }
     } else {
-
+      // streaming job is restarted and there are no changes to the number of partitions in the topic
+      for (partition <- 0 to persistedNumberOfPartitionsForTopic-1 ) {
+        val fromOffset: Long = 0 // TODO
+        fromOffsets += (new TopicPartition(topic, partition) -> fromOffset.toLong)
+      }
     }
+
+    fromOffsets.toMap
    }  
 
-  def commitOffsets(): Unit = {  
+  def commitOffsets(topic: String): Unit = {  
 
   }
 
