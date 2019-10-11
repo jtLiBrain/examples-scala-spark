@@ -5,11 +5,7 @@
     <groupId>com.jtLiBrain</groupId>
     <artifactId>examples-scala-spark_parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <modules>
-        <module>spark</module>
-        <module>scala</module>
-        <module>spark-elasticsearch</module>
-    </modules>
+
     <name>Examples with Scala and Spark</name>
     <description></description>
     <packaging>pom</packaging>
