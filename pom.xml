@@ -45,7 +45,7 @@
         <jedis.version>3.0.1</jedis.version>
         <fastjson.version>1.2.58</fastjson.version>
         <hikariCP.version>3.3.1</hikariCP.version>
-        <kafka.version>0.10.2.2</kafka.version>
+        <kafka.version>2.0.0</kafka.version>
         <zkclient.version>0.11</zkclient.version>
         <zookeeper.version>3.4.6</zookeeper.version>
 
