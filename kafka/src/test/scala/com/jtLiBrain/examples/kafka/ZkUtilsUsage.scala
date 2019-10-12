@@ -27,7 +27,7 @@ class ZkUtilsUsage extends FunSuite with BeforeAndAfterAll {
 
     test("execute") {
 
-        kafka.admin.TopicCommand
-        zkUtils.getPartitionsForTopics()
+        /*kafka.admin.TopicCommand
+        zkUtils.getPartitionsForTopics()*/
     }
 }

@@ -5,6 +5,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.PartitionInfo;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,6 +42,7 @@ public class KafkaConsumerSuite {
             consumer.close();
     }
 
+    @Test
     public void test() {
         List<PartitionInfo> partitionsForTopic = consumer.partitionsFor(topic);
 
