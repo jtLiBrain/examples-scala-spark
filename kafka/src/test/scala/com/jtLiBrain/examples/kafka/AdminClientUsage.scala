@@ -17,6 +17,8 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 class AdminClientUsage extends FunSuite with BeforeAndAfterAll {
   private var adminClient: AdminClient = _
 
+  private val consumerGroup = ""
+
   override def beforeAll(): Unit = {
     val props:Properties = null
     adminClient = AdminClient.create(props)
@@ -24,5 +26,14 @@ class AdminClientUsage extends FunSuite with BeforeAndAfterAll {
 
   override def afterAll(): Unit = {
     adminClient.close()
+  }
+
+  test("describeConsumerGroup") {
+
+  }
+
+  test("listGroupOffsets") {
+    val offsets = adminClient.listGroupOffsets(consumerGroup)
+
   }
 }
