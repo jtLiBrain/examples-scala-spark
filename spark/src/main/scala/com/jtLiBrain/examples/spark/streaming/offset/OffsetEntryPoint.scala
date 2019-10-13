@@ -55,9 +55,9 @@ class OffsetEntryPoint {
 
   def commitOffsets(consumerGroupID: String, offsetRanges: Array[OffsetRange], millis: Long): Unit = {
     for(offset <- offsetRanges) {
-      // save as: topic | partition | fromOffset | untilOffset | batchTime
+      // save as: topic | groupID | partition | fromOffset | untilOffset | batchTime
       // OR
-      // save as: topic | partition | untilOffset | batchTime
+      // save as: topic | groupID | partition | untilOffset | batchTime
     }
   }
 
