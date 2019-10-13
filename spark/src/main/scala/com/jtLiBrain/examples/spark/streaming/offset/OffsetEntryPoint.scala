@@ -2,10 +2,11 @@ package com.jtLiBrain.examples.spark.streaming.offset
 
 import kafka.utils.ZkUtils
 import org.apache.kafka.common.TopicPartition
+import org.apache.spark.streaming.kafka010.OffsetRange
 
 class OffsetEntryPoint {
 
-  def getLastOffsets(topic: String): Map[TopicPartition, Long] = {
+  def getLastCommittedOffsets(topic: String): Map[TopicPartition, Long] = {
     val zkUrl: String = null
     val sessionTimeout: Int = 0
     val connectionTimeout: Int = 0
@@ -25,7 +26,7 @@ class OffsetEntryPoint {
     val fromOffsets = collection.mutable.Map[TopicPartition, Long]()
 
     if (persistedNumberOfPartitionsForTopic == 0) {
-      // streaming job is started for first run
+      // streaming job is started for first time
       for (partition <- 0 to zkNumberOfPartitionsForTopic - 1)
         fromOffsets += (new TopicPartition(topic, partition) -> 0)
     } else if (zkNumberOfPartitionsForTopic > persistedNumberOfPartitionsForTopic) {
@@ -52,8 +53,12 @@ class OffsetEntryPoint {
     fromOffsets.toMap
   }
 
-  def commitOffsets(topic: String): Unit = {
-
+  def commitOffsets(consumerGroupID: String, offsetRanges: Array[OffsetRange], millis: Long): Unit = {
+    for(offset <- offsetRanges) {
+      // save as: topic | partition | fromOffset | untilOffset | batchTime
+      // OR
+      // save as: topic | partition | untilOffset | batchTime
+    }
   }
 
 }
