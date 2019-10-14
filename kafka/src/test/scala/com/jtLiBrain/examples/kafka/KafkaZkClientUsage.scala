@@ -86,4 +86,14 @@ class KafkaZkClientUsage extends FunSuite with BeforeAndAfterAll {
         println("Topic " + topic + " doesn't exist!")
     }
   }
+
+  test("getConsumerOffset") {
+    // TODO
+    // kafkaZkClient.getConsumerOffset()
+  }
+
+  test("setOrCreateConsumerOffset") {
+    // 
+    // kafkaZkClient.setOrCreateConsumerOffset()
+  }
 }
