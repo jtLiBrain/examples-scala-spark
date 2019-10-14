@@ -5,11 +5,13 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.PartitionInfo;
+import org.apache.kafka.common.TopicPartition;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
@@ -71,11 +73,12 @@ public class KafkaConsumerSuite {
     }
 
     /**
-     * see {@link kafka.tools.GetOffsetShell}
+     * to get offsets, see usage in {@link kafka.tools.GetOffsetShell}
      */
     @Test
     public void testBeginningOffsets() {
         // TODO
-        consumer.beginningOffsets(null);
+        Collection<TopicPartition> partitions = null;
+        consumer.beginningOffsets(partitions);
     }
 }
