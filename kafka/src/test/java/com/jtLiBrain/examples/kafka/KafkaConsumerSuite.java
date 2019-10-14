@@ -62,7 +62,7 @@ public class KafkaConsumerSuite {
     }
 
     @Test
-    public void test() {
+    public void testPartitionsFor() {
         List<PartitionInfo> partitionsForTopic = consumer.partitionsFor(topic);
 
         partitionsForTopic.forEach(partitionInfo -> {
@@ -70,4 +70,12 @@ public class KafkaConsumerSuite {
         });
     }
 
+    /**
+     * see {@link kafka.tools.GetOffsetShell}
+     */
+    @Test
+    public void testBeginningOffsets() {
+        // TODO
+        consumer.beginningOffsets(null);
+    }
 }
