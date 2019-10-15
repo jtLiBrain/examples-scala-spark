@@ -39,7 +39,7 @@
         <maven.assembly.plugin.version>3.1.1</maven.assembly.plugin.version>
         <maven.shade.plugin.version>3.2.1</maven.shade.plugin.version>
 
-        <elasticsearch.version>6.2.4</elasticsearch.version>
+        <elasticsearch.version>7.3.0</elasticsearch.version>
         <scalaj.version>2.4.1</scalaj.version>
         <mysql.jdbc.version>5.1.47</mysql.jdbc.version>
         <jedis.version>3.0.1</jedis.version>
