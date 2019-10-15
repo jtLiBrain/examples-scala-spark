@@ -18,7 +18,7 @@ import java.util.Properties;
 import static com.jtLiBrain.examples.kafka.Utils.*;
 
 public class KafkaConsumerSuite {
-    private String topic = "users";
+    private String topic = "test";
 
     private KafkaConsumer<String, String> consumer;
 
@@ -26,7 +26,7 @@ public class KafkaConsumerSuite {
     public void before() {
         Properties props = new Properties();
 
-        props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.56.101:9092");
         props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "test-group5");
         props.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         props.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");

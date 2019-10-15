@@ -1,5 +1,6 @@
 package com.jtLiBrain.examples.kafka
 
+import com.typesafe.scalalogging.LazyLogging
 import kafka.server.ConfigType
 import kafka.zk.{AdminZkClient, KafkaZkClient}
 import org.apache.kafka.common.TopicPartition
@@ -15,7 +16,7 @@ import scala.collection.JavaConverters._
   * 1. kafka.zk.KafkaZkClient exist in org.apache.kafka:kafka_2.11 dependency library
   * 2. usage about kafka.zk.KafkaZkClient see code in kafka.admin.TopicCommand
   */
-class KafkaZkClientUsage extends FunSuite with BeforeAndAfterAll {
+class KafkaZkClientUsage extends FunSuite with BeforeAndAfterAll with LazyLogging {
   private var kafkaZkClient: KafkaZkClient = _
   private var adminZkClient: AdminZkClient = _
 
@@ -32,7 +33,6 @@ class KafkaZkClientUsage extends FunSuite with BeforeAndAfterAll {
     kafkaZkClient = KafkaZkClient(
       connectString, isSecure, sessionTimeoutMs, connectionTimeoutMs, maxInFlightRequests, time
     )
-
 
     adminZkClient = new AdminZkClient(kafkaZkClient)
   }
@@ -87,13 +87,48 @@ class KafkaZkClientUsage extends FunSuite with BeforeAndAfterAll {
     }
   }
 
+  /**
+    * get data into /consumers/{group-name}/offsets/{topic-name}/{partition-num} in Zookeeper
+    */
   test("getConsumerOffset") {
-    // TODO
-    // kafkaZkClient.getConsumerOffset()
+    val consumerGroup = "test-group6"
+
+    val offsets = collection.mutable.Buffer[(String, Int, Long)]()
+
+    kafkaZkClient.getPartitionAssignmentForTopics(immutable.Set(topic)).get(topic) match {
+      case Some(topicPartitionAssignment) =>
+        val sortedPartitions = topicPartitionAssignment.toSeq.sortBy(_._1)
+        for ((partitionId, assignedReplicas) <- sortedPartitions) {
+
+          val topicPartition = new TopicPartition(topic, partitionId)
+
+          kafkaZkClient.getConsumerOffset(consumerGroup, topicPartition) match {
+            case Some(offset) => offsets += ((topic, partitionId, offset))
+            case None => offsets += ((topic, partitionId, -1)) // just for display
+          }
+        }
+      case None =>
+        logger.warn(s"No partitions for the topic:$topic")
+    }
+
+    offsets.foreach{ offset =>
+      print("\tTopic: " + offset._1)
+      print("\tPartition: " + offset._2)
+      print("\tOffset: " + offset._3)
+      println()
+    }
   }
 
+  /**
+    * set data into /consumers/{group-name}/offsets/{topic-name}/{partition-num} in Zookeeper
+    */
   test("setOrCreateConsumerOffset") {
-    // 
-    // kafkaZkClient.setOrCreateConsumerOffset()
+    val consumerGroup = "test-group6"
+    val partitionId = 0
+    val offset = 2
+
+    val topicPartition = new TopicPartition(topic, partitionId)
+
+    kafkaZkClient.setOrCreateConsumerOffset(consumerGroup, topicPartition, offset)
   }
 }
