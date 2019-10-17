@@ -17,7 +17,7 @@ import java.util.Properties;
 
 import static com.jtLiBrain.examples.kafka.Utils.*;
 
-public class KafkaConsumerSuite {
+public class KafkaConsumerExample {
     private String topic = "test";
 
     private KafkaConsumer<String, String> consumer;

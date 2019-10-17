@@ -36,6 +36,9 @@ class AdminClientUsage extends FunSuite with BeforeAndAfterAll {
     val consumerGroupSummary = adminClient.describeConsumerGroup(consumerGroup, 5000)
   }
 
+  /**
+    * use topics named '__consumer_offsets' in Kafka
+    */
   test("listGroupOffsets") {
     val offsets = adminClient.listGroupOffsets(consumerGroup)
 
