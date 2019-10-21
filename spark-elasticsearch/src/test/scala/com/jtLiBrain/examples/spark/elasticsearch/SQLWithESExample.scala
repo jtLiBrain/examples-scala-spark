@@ -5,6 +5,7 @@ import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.scalatest.FunSuite
 
 case class Person(name: String, age: Int)
+case class BookOrder(name: String, amount: Int, time: String)
 
 class SQLWithESExample extends FunSuite with DataFrameSuiteBase {
   test("saveToEs") {
@@ -17,6 +18,40 @@ class SQLWithESExample extends FunSuite with DataFrameSuiteBase {
         .toDF()
 
     EsSparkSQL.saveToEs(df, "sparks-es-sql")
+  }
+
+  test("saveToEs - dynamic resource 1") {
+    val sparkSession = spark
+    import sparkSession.implicits._
+
+    val df = sparkSession.read.textFile("file:/Users/Dream/Dev/git/examples-scala-spark/data/people.txt")
+      .map(_.split(","))
+      .map(p => Person(p(0), p(1).trim.toInt))
+      .toDF()
+
+
+    val esOptions = Map(
+      "es.resource.write" -> "sparks-es-sql-generation-{age}"
+    )
+
+    EsSparkSQL.saveToEs(df, esOptions)
+  }
+
+  test("saveToEs - dynamic resource 2") {
+    val sparkSession = spark
+    import sparkSession.implicits._
+
+    val df = sparkSession.read.textFile("file:/Users/Dream/Dev/git/examples-scala-spark/data/people.txt")
+      .map(_.split(","))
+      .map(p => Person(p(0), p(1).trim.toInt))
+      .toDF()
+
+    val esOptions = Map(
+      "es.resource.write" -> "sparks-es-sql-generation-{age}",
+      "es.mapping.exclude" -> "age"
+    )
+
+    EsSparkSQL.saveToEs(df, esOptions)
   }
 
   test("read from es - 1") {
