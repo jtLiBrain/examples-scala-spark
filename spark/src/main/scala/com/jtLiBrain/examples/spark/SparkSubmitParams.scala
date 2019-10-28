@@ -1,0 +1,22 @@
+package com.jtLiBrain.examples.spark
+
+import org.apache.kafka.clients.consumer.ConsumerConfig
+
+object SparkSubmitParams {
+  val LOG_LEVEL = "spark.jtLiBrain.log.level"
+
+  val STREAMING_BATCH_INTERVAL = "spark.jtLiBrain.streaming.batchInterval"
+
+  val KAFKA_TOPIC            = "spark.jtLiBrain.kafka.topic"
+  val KAFKA_GROUP_DYNAMIC    = "spark.jtLiBrain.kafka.group.dynamic"
+  val KAFKA_OPTIONS_PREFIX   = "spark.jtLiBrain.kafka.options."
+  val KAFKA_OPTIONS_GROUP_ID              = KAFKA_OPTIONS_PREFIX + ConsumerConfig.GROUP_ID_CONFIG
+  val KAFKA_OPTIONS_BOOTSTRAP_SERVERS     = KAFKA_OPTIONS_PREFIX + ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG
+  val KAFKA_OPTIONS_AUTO_OFFSET_RESET     = KAFKA_OPTIONS_PREFIX + ConsumerConfig.AUTO_OFFSET_RESET_CONFIG
+  val KAFKA_OPTIONS_ENABLE_AUTO_COMMIT    = KAFKA_OPTIONS_PREFIX + ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG
+  val KAFKA_OPTIONS_FETCH_MAX_WAIT_MS     = KAFKA_OPTIONS_PREFIX + ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG
+  val KAFKA_OPTIONS_HEARTBEAT_INTERVAL_MS = KAFKA_OPTIONS_PREFIX + ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG
+  val KAFKA_OPTIONS_SESSION_TIMEOUT_MS    = KAFKA_OPTIONS_PREFIX + ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG
+  val KAFKA_OPTIONS_REQUEST_TIMEOUT_MS    = KAFKA_OPTIONS_PREFIX + ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG
+  val KAFKA_OPTIONS_MAX_POLL_RECORDS      = KAFKA_OPTIONS_PREFIX + ConsumerConfig.MAX_POLL_RECORDS_CONFIG
+}
