@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.jtLiBrain</groupId>
-    <artifactId>examples-scala-spark_parent</artifactId>
+    <artifactId>examples-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <name>Examples with Scala and Spark</name>
