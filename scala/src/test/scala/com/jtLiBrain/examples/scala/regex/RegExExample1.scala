@@ -1,4 +1,4 @@
-package com.jtLiBrain.examples.scala
+package com.jtLiBrain.examples.scala.regex
 
 import org.scalatest.FunSuite
 
@@ -8,7 +8,7 @@ import scala.util.matching.Regex
   * https://docs.scala-lang.org/tour/regular-expression-patterns.html
   * https://www.scala-lang.org/api/2.11.12/#scala.util.matching.Regex
   */
-class RegularExpressionExample extends FunSuite {
+class RegExExample1 extends FunSuite {
   test("findFirstMatchIn") {
     val numberPattern: Regex = "[0-9]".r
 
