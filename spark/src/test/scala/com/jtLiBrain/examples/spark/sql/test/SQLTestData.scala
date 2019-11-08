@@ -279,6 +279,24 @@ private[sql] trait SQLTestData { self =>
     df
   }
 
+  protected lazy val userActivityData: DataFrame = {
+    val st = System.currentTimeMillis()
+    val one_minute = 60 * 1000
+
+    val d = Array(
+      UserActivityData("user1",  st, null),
+      UserActivityData("user2",  st +   5*one_minute, null),
+      UserActivityData("user1",  st +  10*one_minute, null),
+      UserActivityData("user1",  st +  15*one_minute, null),
+      UserActivityData("user2",  st +  15*one_minute, null),
+      UserActivityData("user1",  st + 140*one_minute, null),
+      UserActivityData("user1",  st + 160*one_minute, null)
+    )
+
+    val df = spark.sparkContext.parallelize(d).toDF()
+    df.createOrReplaceTempView("courseSales")
+    df
+  }
   /**
    * Initialize all test data such that all temp tables are properly registered.
    */
@@ -337,4 +355,6 @@ private[sql] object SQLTestData {
     override def toString: String = s"course: $course, year: $year, earnings: $earnings"
   }
   case class TrainingSales(training: String, sales: CourseSales)
+
+  case class UserActivityData(user:String, ts:Long, session:String)
 }

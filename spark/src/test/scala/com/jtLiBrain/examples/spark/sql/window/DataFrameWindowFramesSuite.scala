@@ -21,6 +21,7 @@ import java.sql.{Date, Timestamp}
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import com.jtLiBrain.examples.spark.sql.test.SQLTestData
+import org.apache.spark.sql.Row
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
 import org.apache.spark.unsafe.types.CalendarInterval
@@ -30,10 +31,9 @@ import org.scalatest.FunSuite
  * Window frame testing for DataFrame API.
  */
 class DataFrameWindowFramesSuite extends FunSuite with SQLTestData with DataFrameSuiteBase {
-  val sparkSession = spark
-  import sparkSession.implicits._
 
-  test("lead/lag with empty data frame") {
+
+  /*test("lead/lag with empty data frame") {
     val df = Seq.empty[(Int, String)].toDF("key", "value")
     val window = Window.partitionBy($"key").orderBy($"value")
 
@@ -42,21 +42,48 @@ class DataFrameWindowFramesSuite extends FunSuite with SQLTestData with DataFram
         lead("value", 1).over(window),
         lag("value", 1).over(window)),
       Nil)
-  }
+  }*/
 
   test("lead/lag with positive offset") {
+    val sparkSession = spark
+    import sparkSession.implicits._
+
     val df = Seq((1, "1"), (2, "2"), (1, "3"), (2, "4")).toDF("key", "value")
     val window = Window.partitionBy($"key").orderBy($"value")
 
-    checkAnswer(
+    df.select(
+      $"key",$"value",
+      lead("value", 1).over(window),
+      lag("value", 1).over(window)).show(10)
+
+    /*checkAnswer(
       df.select(
         $"key",
         lead("value", 1).over(window),
         lag("value", 1).over(window)),
-      Row(1, "3", null) :: Row(1, null, "1") :: Row(2, "4", null) :: Row(2, null, "2") :: Nil)
+      Row(1, "3", null) :: Row(1, null, "1") :: Row(2, "4", null) :: Row(2, null, "2") :: Nil)*/
   }
 
-  test("reverse lead/lag with positive offset") {
+  test("sliding rows between with aggregation") {
+    val sparkSession = spark
+    import sparkSession.implicits._
+
+    val df = Seq((1, "1"), (2, "1"), (2, "2"), (1, "1"), (2, "2")).toDF("key", "value")
+    val window = Window.partitionBy($"value").orderBy($"key").rowsBetween(-1, 2)
+
+    df.select(
+      $"key", $"value",
+      avg("key").over(window)).show(10)
+
+    /*checkAnswer(
+      df.select(
+        $"key",
+        avg("key").over(window)),
+      Row(1, 4.0d / 3.0d) :: Row(1, 4.0d / 3.0d) :: Row(2, 3.0d / 2.0d) :: Row(2, 2.0d) ::
+        Row(2, 2.0d) :: Nil)*/
+  }
+
+  /*test("reverse lead/lag with positive offset") {
     val df = Seq((1, "1"), (2, "2"), (1, "3"), (2, "4")).toDF("key", "value")
     val window = Window.partitionBy($"key").orderBy($"value".desc)
 
@@ -418,5 +445,5 @@ class DataFrameWindowFramesSuite extends FunSuite with SQLTestData with DataFram
       ds.withColumn("m",
         lag("i", 1).over(Window.partitionBy("n").orderBy("i").rowsBetween(-1, -1))),
       res)
-  }
+  }*/
 }
