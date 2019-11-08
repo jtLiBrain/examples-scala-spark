@@ -284,7 +284,7 @@ private[sql] trait SQLTestData { self =>
     val one_minute = 60 * 1000
 
     val d = Array(
-      UserActivityData("user1",  st, null),
+      UserActivityData("user1",  st                 , null),
       UserActivityData("user2",  st +   5*one_minute, null),
       UserActivityData("user1",  st +  10*one_minute, null),
       UserActivityData("user1",  st +  15*one_minute, null),
