@@ -1,6 +1,7 @@
 package com.jtLiBrain.examples.spark.sql.aggregator
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
+import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder
 import org.apache.spark.sql.{Encoder, Encoders}
 import org.apache.spark.sql.expressions.Aggregator
 import org.scalatest.FunSuite
@@ -9,7 +10,7 @@ import scala.collection.mutable
 
 /**
   * see org.apache.spark.examples.sql.UserDefinedTypedAggregation
-  *
+  * see org.apache.spark.sql.DatasetAggregatorSuite.scala#MapTypeBufferAgg
   *
   * NOTE: can't work
   */
@@ -53,9 +54,9 @@ object MyAggregator extends Aggregator[Map[String, Long], mutable.Map[String, Lo
     reduction
   }
 
-  override def bufferEncoder: Encoder[mutable.Map[String, Long]] = Encoders.kryo[mutable.Map[String, Long]]
+  override def bufferEncoder: Encoder[mutable.Map[String, Long]] = ExpressionEncoder() //Encoders.kryo[mutable.Map[String, Long]]
 
-  override def outputEncoder: Encoder[mutable.Map[String, Long]] = Encoders.kryo[mutable.Map[String, Long]]
+  override def outputEncoder: Encoder[mutable.Map[String, Long]] = ExpressionEncoder() //Encoders.kryo[mutable.Map[String, Long]]
 
   def mergeMap(srcMap: scala.collection.Map[String, Long], targetMap: collection.mutable.Map[String, Long]): Unit = {
     srcMap.foreach{ case (k,v) =>
