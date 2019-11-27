@@ -6,6 +6,26 @@ import org.apache.spark.sql.types.{DataType, DataTypes, StructField, StructType}
 
 /**
   * https://stackoverflow.com/questions/36629916/why-mutable-map-becomes-immutable-automatically-in-userdefinedaggregatefunction
+  *
+  *
+  * org.apache.spark.sql.catalyst.CatalystTypeConverters#MapConverter#toCatalystImpl(scalaValue: Any)
+  * ```
+  * override def toCatalystImpl(scalaValue: Any): MapData = {
+  *   val keyFunction = (k: Any) => keyConverter.toCatalyst(k)
+  *   val valueFunction = (k: Any) => valueConverter.toCatalyst(k)
+  *
+  *   scalaValue match {
+  *     case map: Map[_, _] => ArrayBasedMapData(map, keyFunction, valueFunction)
+  *     case javaMap: JavaMap[_, _] => ArrayBasedMapData(javaMap, keyFunction, valueFunction)
+  *     case other => throw new IllegalArgumentException(
+  *       s"The value (${other.toString}) of the type (${other.getClass.getCanonicalName}) "
+  *         + "cannot be converted to a map type with "
+  *         + s"key type (${keyType.catalogString}) and value type (${valueType.catalogString})")
+  *   }
+  * }
+  * ```
+  *
+  * It seems that any map types must be converted to corresponding map type in catalyst framework.
   */
 class AggregatorWithMutableMap extends UserDefinedAggregateFunction {
   override def inputSchema: StructType = StructType (
