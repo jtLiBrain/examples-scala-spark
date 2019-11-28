@@ -51,10 +51,9 @@ class DataFrameWindowFramesSuite extends FunSuite with SQLTestData with DataFram
     val df = Seq((1, "1"), (2, "2"), (1, "3"), (2, "4")).toDF("key", "value")
     val window = Window.partitionBy($"key").orderBy($"value")
 
-    df.select(
-      $"key",$"value",
-      lead("value", 1).over(window),
-      lag("value", 1).over(window)).show(10)
+    df.withColumn("lead-1", lead("value", 1).over(window))
+      .withColumn("lag-1", lag("value", 1).over(window))
+      .show(10)
 
     /*checkAnswer(
       df.select(
@@ -68,11 +67,11 @@ class DataFrameWindowFramesSuite extends FunSuite with SQLTestData with DataFram
     val sparkSession = spark
     import sparkSession.implicits._
 
-    val df = Seq((1, "1"), (2, "1"), (2, "2"), (1, "1"), (2, "2")).toDF("key", "value")
+    val df = Seq((1, "1"), (1, "1"), (2, "1"), (2, "2"), (1, "1"), (2, "2")).toDF("key", "value")
     val window = Window.partitionBy($"value").orderBy($"key").rowsBetween(-1, 2)
 
     df.select(
-      $"key", $"value",
+      $"value",$"key",
       avg("key").over(window)).show(10)
 
     /*checkAnswer(
