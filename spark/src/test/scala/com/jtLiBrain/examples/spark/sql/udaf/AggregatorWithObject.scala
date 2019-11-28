@@ -6,6 +6,7 @@ import org.apache.spark.sql.types.{DataType, DataTypes, ObjectType, StructField,
 
 /**
   * https://stackoverflow.com/questions/36629916/why-mutable-map-becomes-immutable-automatically-in-userdefinedaggregatefunction
+  * https://issues.apache.org/jira/browse/SPARK-17770
   */
 class AggregatorWithObject extends UserDefinedAggregateFunction {
   override def inputSchema: StructType = StructType (
