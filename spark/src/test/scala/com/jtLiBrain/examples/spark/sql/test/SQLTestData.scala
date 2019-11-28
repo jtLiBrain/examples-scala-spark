@@ -284,7 +284,7 @@ private[sql] trait SQLTestData { self =>
     val one_minute = 60 * 1000
 
     val d = Array(
-      UserActivityData("user1",  st                 , null),
+      UserActivityData("user1",  st                 , "f237e656-1e53-4a24-9ad5-2b4576a4125d"),
       UserActivityData("user2",  st +   5*one_minute, null),
       UserActivityData("user1",  st +  10*one_minute, null),
       UserActivityData("user1",  st +  15*one_minute, null),
@@ -294,7 +294,7 @@ private[sql] trait SQLTestData { self =>
     )
 
     val df = spark.sparkContext.parallelize(d).toDF()
-    df.createOrReplaceTempView("courseSales")
+    df.createOrReplaceTempView("userActivity")
     df
   }
   /**
