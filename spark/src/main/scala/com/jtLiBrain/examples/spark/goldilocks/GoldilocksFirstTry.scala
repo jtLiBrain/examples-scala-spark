@@ -14,7 +14,7 @@ object GoldilocksGroupByKey {
     ranks: List[Long]): Map[Int, Iterable[Double]] = {
     require(ranks.forall(_ > 0))
     //Map to column index, value pairs
-    val pairRDD: RDD[(Int, Double)] = mapToKeyValuePairs(dataFrame)
+    val pairRDD: RDD[(Int, Double)] = GoldilocksUtils.mapToKeyValuePairs(dataFrame)
 
     val groupColumns: RDD[(Int, Iterable[Double])] = pairRDD.groupByKey()
     groupColumns.mapValues(
@@ -55,14 +55,7 @@ object GoldilocksGroupByKey {
   //end::groupByKey[]
 
 
-  //tag::toKeyValPairs[]
-  def mapToKeyValuePairs(dataFrame: DataFrame): RDD[(Int, Double)] = {
-    val rowLength = dataFrame.schema.length
-    dataFrame.rdd.flatMap(
-      row => Range(0, rowLength).map(i => (i, row.getDouble(i)))
-    )
-  }
-  //end::toKeyValPairs[]
+
 }
 
 
