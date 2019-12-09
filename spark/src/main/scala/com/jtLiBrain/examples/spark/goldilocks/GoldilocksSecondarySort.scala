@@ -18,7 +18,7 @@ class ColumnIndexPartition(override val numPartitions: Int)
   }
 }
 
-object GoldilocksSecondarySort {
+object GoldilocksSecondarySortV1 {
   /**
    * Find nth target rank for every column.
    *
