@@ -35,4 +35,15 @@ class DataFrameFunctionsExample extends FunSuite with SQLTestData with DataFrame
         approx_count_distinct("values")
       ).show(10, false)
   }
+
+  test("describe") {
+    val sparkSession = spark
+    import sparkSession.implicits._
+
+    Seq(
+      1, 2, 2
+    ).toDF("value")
+      .describe("value")
+      .show()
+  }
 }
