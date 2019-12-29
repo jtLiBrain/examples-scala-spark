@@ -49,14 +49,14 @@ object PredictForestCover {
     model.transform(featureVectorData)
   }
 
-  def transformToFeatureVector(trainData: DataFrame): DataFrame = {
-    val inputCols = trainData.columns.filter(_ != "Cover_Type")
+  def transformToFeatureVector(data: DataFrame): DataFrame = {
+    val inputCols = data.columns.filter(_ != "Cover_Type")
 
     val assembler = new VectorAssembler()
       .setInputCols(inputCols)
       .setOutputCol("featureVector")
 
-    assembler.transform(trainData)
+    assembler.transform(data)
   }
 
   def train(trainVectorData: DataFrame): DecisionTreeClassificationModel = {
