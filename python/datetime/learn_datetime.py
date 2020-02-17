@@ -18,3 +18,7 @@ print(dateTimeAfter1Day)
 # 4
 currentTime = datetime.now()
 print(currentTime)
+
+# 5
+dateTime2 = datetime(2019, 9, 12, 11)
+print(dateTime2)
