@@ -47,7 +47,8 @@ class VectorsExample extends FunSuite with DataFrameSuiteBase {
     println(s"with weight: mean = ${meanVal}, variance = ${varianceVal}")
 
     val (meanVal2, varianceVal2) = df.select(
-      mean($"features"), variance($"features") // 这里是样本方差，不是总体方差
+      mean($"features"),
+      variance($"features") // 这里是样本方差，不是总体方差
     ).as[(Vector, Vector)].first()
 
     println(s"without weight: mean = ${meanVal2}, variance = ${varianceVal2}")
