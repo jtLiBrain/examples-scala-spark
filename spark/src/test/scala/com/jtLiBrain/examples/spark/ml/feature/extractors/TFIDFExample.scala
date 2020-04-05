@@ -1,4 +1,4 @@
-package com.jtLiBrain.examples.spark.ml
+package com.jtLiBrain.examples.spark.ml.feature.extractors
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import org.apache.spark.ml.feature.{HashingTF, IDF, Tokenizer}
