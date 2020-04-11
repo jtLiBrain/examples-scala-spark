@@ -28,3 +28,19 @@ FOLLOWING
 ROW类型的Frame - 物理位置偏移 基于当前输入行在该分区所在的实际位置的位置偏移量
 
 RANG类型的Frame - 逻辑数值偏移 基于当前输入行在该分区内、对于排序字段的数值偏移量
+
+
+
+|Function Type| SQL| DataFrame API|
+|--|--|--|
+|Ranking |rank | rank |
+|Ranking |dense_rank|denseRank|
+|Ranking |percent_rank |percentRank|
+|Ranking |ntile|ntile| 
+|Ranking |row_number|rowNumber|
+ 
+|Analytic |cume_dist|cumeDist| 
+|Analytic |first_value |firstValue| 
+|Analytic |last_value |lastValue| 
+|Analytic |lag|lag| 
+|Analytic |lead|lead|

@@ -30,7 +30,7 @@ class InteractionExample extends FunSuite with DataFrameSuiteBase {
 
     val interaction = new Interaction()
       .setInputCols(Array("id1", "vec1", "vec2"))
-      .setOutputCol("interactedCol") // 该列中的值是：每个来自vec1列的值与每个来自vec2列的值的乘积集合
+      .setOutputCol("interactedCol") // 该列中的值是：id1 * 每个来自vec1列的值* 与相应索引上每个来自vec2列的值的乘积集合
 
     val interacted = interaction.transform(assembled2)
 
