@@ -15,7 +15,7 @@ class CountVectorizerExample extends FunSuite with DataFrameSuiteBase {
     val cvModel1: CountVectorizerModel = new CountVectorizer()
       .setInputCol("words")
       .setOutputCol("features")
-      .setVocabSize(3) // 词库大小
+      .setVocabSize(3) // 词库大小，词频前三的词项作为词库项
       .setMinDF(2)
       .fit(df)
 
