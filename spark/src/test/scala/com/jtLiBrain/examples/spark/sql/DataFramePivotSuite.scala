@@ -51,7 +51,7 @@ class DataFramePivotSuite extends FunSuite with DataFrameSuiteBase with SQLTestD
   }
 
   /**
-    * 分组列在一列中列出来，pivot列在一行中列出来；
+    * 分组列的值在一列中列出来，pivot列的值在一行中列出来；
     * 可以认为是先按分组列分组，再按各个pivot列分组
     */
   test("pivot year") {
