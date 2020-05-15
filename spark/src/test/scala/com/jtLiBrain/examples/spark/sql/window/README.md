@@ -38,7 +38,7 @@ RANG类型的Frame - 逻辑数值偏移 基于当前输入行在该分区内、�
 |Ranking |ntile|ntile| 
 |Ranking |row_number|rowNumber|
  
- Function Type| SQL| DataFrame API|
+|Function Type| SQL| DataFrame API|
 |Analytic |cume_dist|cumeDist| 
 |Analytic |first_value |firstValue| 
 |Analytic |last_value |lastValue| 
