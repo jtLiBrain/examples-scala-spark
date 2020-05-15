@@ -6,6 +6,20 @@ import org.apache.spark.sql.functions._
 import org.scalatest.FunSuite
 
 class DataFrameFunctionsExample extends FunSuite with SQLTestData with DataFrameSuiteBase {
+  test("sts and stddev_pop") {
+    val sparkSession = spark
+    import sparkSession.implicits._
+
+    Seq(
+      1
+    ).toDF("value")
+      .groupBy("value").agg(
+      mean("value"),
+      stddev("value"), // 样本标准差，自由度为n-1
+      stddev_pop("value") // 总体标准差，自由度为n
+    ).show(10, false)
+  }
+
   test("explode") {
     val sparkSession = spark
     import sparkSession.implicits._
