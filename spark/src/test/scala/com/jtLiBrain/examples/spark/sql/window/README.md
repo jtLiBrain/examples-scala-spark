@@ -19,11 +19,11 @@ Frame规范的三个组成元素：
 + Frame的类型: ROW、RANGE
 
 Frame的边界类型：
-+ UNBOUNDED PRECEDING:：分区中的第一行
++ UNBOUNDED PRECEDING：分区中的第一行
 + UNBOUNDED FOLLOWING：分区中的最后一行
-+ CURRENT ROW
++ CURRENT ROW：
 + PRECEDING：
-+ FOLLOWING
++ FOLLOWING：
 
 ROW类型的Frame - 物理位置偏移 基于当前输入行在该分区所在的实际位置的位置偏移量
 RANG类型的Frame - 逻辑数值偏移 基于当前输入行在该分区内、对于排序字段的数值偏移量
@@ -39,6 +39,7 @@ RANG类型的Frame - 逻辑数值偏移 基于当前输入行在该分区内、�
 |Ranking |row_number|rowNumber|
  
 |Function Type| SQL| DataFrame API|
+|--|--|--|
 |Analytic |cume_dist|cumeDist| 
 |Analytic |first_value |firstValue| 
 |Analytic |last_value |lastValue| 
