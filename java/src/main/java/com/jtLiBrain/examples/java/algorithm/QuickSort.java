@@ -17,12 +17,12 @@ public class QuickSort {
     }
 
     /**
-     * 以数组开始索引位置的数值为基准值，对数据[fromIndex, toIndex]进行重新排列，
-     * 使基准值左侧数值都小于等于基准值，右侧数值都大于等于基准值
+     * 以数组中指定的开始索引位置的数值为基准值，对 [fromIndex, toIndex] 范围的数组分段进行重新排列，
+     * 使得重排后的数据分段满足：基准值左侧数值都小于等于基准值，右侧数值都大于等于基准值
      * @param data
      * @param fromIndex
      * @param toIndex
-     * @return
+     * @return 返回基准值所在的索引位置
      */
     public static int divideByPivot(int[] data, int fromIndex, int toIndex) {
         int i = fromIndex;
