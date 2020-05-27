@@ -88,7 +88,7 @@ class KafkaZkClientUsage extends FunSuite with BeforeAndAfterAll with LazyLoggin
   }
 
   /**
-    * get data into /consumers/{group-name}/offsets/{topic-name}/{partition-num} in Zookeeper
+    * get data from /consumers/{group-name}/offsets/{topic-name}/{partition-num} in Zookeeper
     */
   test("getConsumerOffset") {
     val consumerGroup = "test-group6"
