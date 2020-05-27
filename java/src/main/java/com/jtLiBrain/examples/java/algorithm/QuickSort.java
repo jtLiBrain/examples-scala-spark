@@ -11,8 +11,8 @@ public class QuickSort {
         if(fromIndex < toIndex) {
             int idx = divideByPivot(data, fromIndex, toIndex);
 
-            divideByPivot(data, 0, idx-1);
-            divideByPivot(data, idx+1, toIndex);
+            sort(data, 0, idx-1);
+            sort(data, idx+1, toIndex);
         }
     }
 
