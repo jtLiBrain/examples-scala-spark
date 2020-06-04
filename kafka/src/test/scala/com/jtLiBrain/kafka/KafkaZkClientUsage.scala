@@ -1,4 +1,4 @@
-package com.jtLiBrain.examples.kafka
+package com.jtLiBrain.kafka
 
 import com.typesafe.scalalogging.LazyLogging
 import kafka.server.ConfigType

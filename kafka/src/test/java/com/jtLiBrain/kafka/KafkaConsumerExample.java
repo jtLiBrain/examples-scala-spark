@@ -1,4 +1,4 @@
-package com.jtLiBrain.examples.kafka;
+package com.jtLiBrain.kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -14,9 +14,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
-
-import static com.jtLiBrain.examples.kafka.Utils.*;
 
 public class KafkaConsumerExample {
     private String topic = "test";
@@ -77,7 +74,7 @@ public void testPoll() {
         List<PartitionInfo> partitionsForTopic = consumer.partitionsFor(topic);
 
         partitionsForTopic.forEach(partitionInfo -> {
-            PN(partitionInfo.toString());
+            Utils.PN(partitionInfo.toString());
         });
     }
 

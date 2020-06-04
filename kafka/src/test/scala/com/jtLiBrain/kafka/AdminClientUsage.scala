@@ -1,5 +1,4 @@
-package com.jtLiBrain.examples.kafka
-
+package com.jtLiBrain.kafka
 
 import java.util.Properties
 

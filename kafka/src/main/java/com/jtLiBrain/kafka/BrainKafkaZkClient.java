@@ -1,4 +1,4 @@
-package com.jtLiBrain.examples.kafka;
+package com.jtLiBrain.kafka;
 
 import kafka.zk.AdminZkClient;
 import kafka.zk.KafkaZkClient;

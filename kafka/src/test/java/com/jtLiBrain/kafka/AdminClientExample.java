@@ -1,4 +1,4 @@
-package com.jtLiBrain.examples.kafka;
+package com.jtLiBrain.kafka;
 
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.admin.AdminClient;

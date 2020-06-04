@@ -1,4 +1,4 @@
-package com.jtLiBrain.examples.kafka;
+package com.jtLiBrain.kafka;
 
 public class Utils {
     public static void PN(Object obj) {
