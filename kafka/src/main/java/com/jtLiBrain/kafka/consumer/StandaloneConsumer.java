@@ -16,6 +16,11 @@ import java.util.Map;
 public abstract class StandaloneConsumer<K, V> extends AbstractConsumer<K, V> {
     private static final Logger logger = LoggerFactory.getLogger(StandaloneConsumer.class);
 
+    /**
+     * process records and commit the offsets for each batch
+     * @param topic
+     * @param timeoutMS
+     */
     public void consume(String topic, long timeoutMS) {
         Map<TopicPartition, Long> offsetMap = null;
         if(!super.autoCommit && !commit2Kafka) {
