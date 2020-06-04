@@ -62,7 +62,13 @@ public abstract class StandaloneConsumer<K, V> extends AbstractConsumer<K, V> {
             } catch (Exception e) {
                 logger.error("Error is encountered", e);
             } finally {
-                super.close();
+                try {
+                    if(commit2Kafka) {
+                        consumer.commitSync();
+                    }
+                } finally {
+                    super.close();
+                }
             }
         }
     }
