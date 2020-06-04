@@ -68,7 +68,8 @@ public abstract class StandaloneConsumer<K, V> extends AbstractConsumer<K, V> {
     }
 
     /**
-     *
+     * if users consider to implement strict transaction to store both the record and the offset in one atomic action,
+     * do the transaction logic in processRecordBatch
      * @param records
      * @param offsetStrategy
      */
