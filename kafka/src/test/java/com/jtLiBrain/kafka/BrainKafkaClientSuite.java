@@ -1,14 +1,13 @@
 package com.jtLiBrain.kafka;
 
 import org.apache.kafka.clients.CommonClientConfigs;
-import org.apache.kafka.clients.admin.AdminClient;
 import org.junit.After;
 import org.junit.Before;
 
 import java.util.Properties;
 
-public class AdminClientExample {
-    private AdminClient adminClient;
+public class BrainKafkaClientSuite {
+    private BrainKafkaClient brainKafkaClient;
 
     @Before
     public void before() {
@@ -16,13 +15,12 @@ public class AdminClientExample {
 
         props.put(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
 
-        adminClient = AdminClient.create(props);
+        brainKafkaClient = new BrainKafkaClient();
+        brainKafkaClient.start(props);
     }
 
     @After
     public void after() {
-        adminClient.close();
+        brainKafkaClient.stop();
     }
-
-
 }

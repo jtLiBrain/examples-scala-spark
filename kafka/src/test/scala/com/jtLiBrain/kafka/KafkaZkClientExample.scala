@@ -16,7 +16,7 @@ import scala.collection.JavaConverters._
   * 1. kafka.zk.KafkaZkClient exist in org.apache.kafka:kafka_2.11 dependency library
   * 2. usage about kafka.zk.KafkaZkClient see code in kafka.admin.TopicCommand
   */
-class KafkaZkClientUsage extends FunSuite with BeforeAndAfterAll with LazyLogging {
+class KafkaZkClientExample extends FunSuite with BeforeAndAfterAll with LazyLogging {
   private var kafkaZkClient: KafkaZkClient = _
   private var adminZkClient: AdminZkClient = _
 
@@ -91,7 +91,7 @@ class KafkaZkClientUsage extends FunSuite with BeforeAndAfterAll with LazyLoggin
     * get data from /consumers/{group-name}/offsets/{topic-name}/{partition-num} in Zookeeper
     */
   test("getConsumerOffset") {
-    val consumerGroup = "test-group6"
+    val consumerGroup = "test-group"
 
     val offsets = collection.mutable.Buffer[(String, Int, Long)]()
 
@@ -123,12 +123,23 @@ class KafkaZkClientUsage extends FunSuite with BeforeAndAfterAll with LazyLoggin
     * set data into /consumers/{group-name}/offsets/{topic-name}/{partition-num} in Zookeeper
     */
   test("setOrCreateConsumerOffset") {
-    val consumerGroup = "test-group6"
+    val topic = "test2"
+    val consumerGroup = "test2-group2"
     val partitionId = 0
     val offset = 2
 
     val topicPartition = new TopicPartition(topic, partitionId)
 
     kafkaZkClient.setOrCreateConsumerOffset(consumerGroup, topicPartition, offset)
+  }
+
+  test("getConsumerOffset2") {
+    val topic = "test2"
+    val consumerGroup = "test2-group2"
+    val partitionId = 0
+
+    val topicPartition = new TopicPartition(topic, partitionId)
+
+    kafkaZkClient.getConsumerOffset(consumerGroup, topicPartition).foreach(println(_))
   }
 }

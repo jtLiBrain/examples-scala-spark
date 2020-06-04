@@ -14,7 +14,7 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
   *
   * 3. usage about kafka.admin.AdminClient see code in kafka.admin.ConsumerGroupCommand
   */
-class AdminClientUsage extends FunSuite with BeforeAndAfterAll {
+class AdminClientScalaExample extends FunSuite with BeforeAndAfterAll {
   private var adminClient: AdminClient = _
 
   private val consumerGroup = "test-group5"
