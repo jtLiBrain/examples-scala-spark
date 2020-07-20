@@ -2,6 +2,7 @@ package com.jtLiBrain.examples.spark.sql
 
 import com.holdenkarau.spark.testing.DataFrameSuiteBase
 import com.jtLiBrain.examples.spark.sql.test.SQLTestData
+import org.apache.spark.sql.Row
 import org.apache.spark.sql.functions._
 import org.scalatest.FunSuite
 
@@ -90,14 +91,15 @@ class DataFrameFunctionsExample extends FunSuite with SQLTestData with DataFrame
 
     df1.select($"key", explode_outer($"values")).show(false)
     /*
-    +---+---+
-    |key|col|
-    +---+---+
-    |1  |1  |
-    |1  |10 |
-    |2  |2  |
-    |2  |20 |
-    +---+---+
++---+----+
+|key|col |
++---+----+
+|1  |1   |
+|1  |10  |
+|2  |2   |
+|2  |20  |
+|3  |null|
++---+----+
      */
 
     val df2 = Seq(
@@ -109,15 +111,15 @@ class DataFrameFunctionsExample extends FunSuite with SQLTestData with DataFrame
 
     df2.select($"key", explode_outer($"values")).show(false)
     /*
-    +---+---+
-    |key|col|
-    +---+---+
-    |1  |1  |
-    |1  |10 |
-    |2  |2  |
-    |2  |20 |
-    |3  |   |
-    +---+---+
++---+---+
+|key|col|
++---+---+
+|1  |1  |
+|1  |10 |
+|2  |2  |
+|2  |20 |
+|3  |   |
++---+---+
      */
   }
 
@@ -146,6 +148,31 @@ class DataFrameFunctionsExample extends FunSuite with SQLTestData with DataFrame
       1, 2, 2
     ).toDF("value")
       .describe()
+      .show()
+  }
+
+  test("udf") {
+    val a = (1, 2)
+    val sparkSession = spark
+    import sparkSession.implicits._
+    val testUdf = udf {(n: Int) =>
+      Map(
+        "c1" -> "n",
+        "c2" -> "a",
+        "c3" -> "b"
+      )
+    }
+    Seq(
+      1, 2, 2
+    ).toDF("value")
+      .select(
+        testUdf($"value").alias("u")
+      )
+    .select(
+      $"u.c1",
+      $"u.c2",
+      $"u.c3"
+    )
       .show()
   }
 }
