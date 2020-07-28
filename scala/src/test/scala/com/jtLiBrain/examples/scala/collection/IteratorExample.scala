@@ -4,6 +4,7 @@ import org.scalatest.FunSuite
 
 /**
  * https://www.scala-lang.org/api/2.12.2/scala/collection/Iterator.html
+ * Scala中的Iterator类似于Java中的java.util.Iterator
  */
 class IteratorExample extends FunSuite {
   test("sliding") {
