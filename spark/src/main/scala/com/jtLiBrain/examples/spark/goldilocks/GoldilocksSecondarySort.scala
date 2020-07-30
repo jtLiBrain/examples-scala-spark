@@ -7,10 +7,8 @@ import org.apache.spark.sql._
 import scala.collection.Map
 import scala.collection.mutable.ArrayBuffer
 
-class ColumnIndexPartition(override val numPartitions: Int)
-  extends Partitioner {
-  require(numPartitions >= 0, s"Number of partitions " +
-    s"($numPartitions) cannot be negative.")
+class ColumnIndexPartition(override val numPartitions: Int) extends Partitioner {
+  require(numPartitions >= 0, s"Number of partitions " + s"($numPartitions) cannot be negative.")
 
   override def getPartition(key: Any): Int = {
     val k = key.asInstanceOf[(Int, Double)]
@@ -65,7 +63,7 @@ object GoldilocksSecondarySortV1 {
   def findRankStatistics(dataFrame: DataFrame,
                          ranks: List[Long], partitions: Int): Map[Int, Iterable[Double]] = {
 
-    // tep 1:
+    // Step 1:
     val pairRDD: RDD[((Int, Double), Int)] =
       GoldilocksUtils.mapToKeyValuePairs(dataFrame).map((_, 1))
 
@@ -78,18 +76,16 @@ object GoldilocksSecondarySortV1 {
     // Step 4: filter for target ranks
     val filterForTargetIndex: RDD[(Int, Double)] =
       sorted.mapPartitions(iter => {
-        var currentColumnIndex = -1
-        var runningTotal = 0
-        iter.filter({
-          case (((colIndex, value), _)) =>
-            if (colIndex != currentColumnIndex) {
-              currentColumnIndex = colIndex //reset to the new column index
-              runningTotal = 1
-            } else {
-              runningTotal += 1
-            }
-          //if the running total corresponds to one of the rank statistics.
-          //keep this ((colIndex, value)) pair.
+        var currentColumnIndex = -1 // 当前列的索引
+        var runningTotal = 0 // 当前列的记录数
+        iter.filter({ case (((colIndex, value), _)) =>
+          if (colIndex != currentColumnIndex) { // 说明开始处理一个新列的数据
+            currentColumnIndex = colIndex // 当新的列索引赋值给currentColumnIndex
+            runningTotal = 1
+          } else {
+            runningTotal += 1
+          }
+          //如果runningTotal是我们关心的排名，那么就保留相应的(colIndex, value)数据
           ranks.contains(runningTotal)
       })
     }.map(_._1), preservesPartitioning = true)
@@ -105,8 +101,7 @@ object GoldilocksSecondarySortV1 {
     * @param it the array of (columnIndex, value) pairs that are already sorted.
     * @return
     */
-  private def groupSorted(
-    it: Array[(Int, Double)]): Map[Int, Iterable[Double]] = {
+  private def groupSorted(it: Array[(Int, Double)]): Map[Int, Iterable[Double]] = {
     //
     val res = List[(Int, ArrayBuffer[Double])]()
     it.foldLeft(res)((list, next) => list match {
@@ -129,7 +124,7 @@ object GoldilocksSecondarySortV1 {
 
 object GoldilocksSecondarySortV2{
   def findRankStatistics(dataFrame: DataFrame,
-  ranks: List[Long], partitions : Int = 2) : Map[Int, Iterable[Double]] = {
+                         ranks: List[Long], partitions : Int = 2) : Map[Int, Iterable[Double]] = {
     val pairRDD = GoldilocksUtils.mapToKeyValuePairs(dataFrame)
     val partitioner = new ColumnIndexPartition(partitions)
     val sorted = pairRDD.map((_, 1)).repartitionAndSortWithinPartitions(partitioner)

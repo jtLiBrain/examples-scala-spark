@@ -1,0 +1,2 @@
+1. GoldilocksSecondarySort和GoldilocksV3具有很好的比较价值；
+2. GoldilocksWithHashMap是一个高阶的解题思路；

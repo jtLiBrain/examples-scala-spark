@@ -81,7 +81,7 @@ object GoldilocksV3 {
   }
 
   /**
-   * Step 2. Find the number of elements for each column in each partition.
+   * Step 2. 计算每个分区中每列的元素个数
    *
    * For Example:
    *
@@ -92,25 +92,23 @@ object GoldilocksV3 {
    * numOfColumns: 3
    *
    * The output will be:
-   *    [(0, [3, 0]), (1, [3, 1])]，表示，分区0中包含
+   *    [(0, [3, 0]), (1, [3, 1])]，表示，分区0中包含3个列0的数据、0个列1的数据
    *
    * @param sortedValueColumnPairs sortedAggregatedValueColumnPairs RDD of
    *                                         ((value, column index), count)
-   * @param numOfColumns the number of columns
+   * @param numOfColumns 列的个数
    *
-   * @return Array that contains
-   *         (partition index, number of elements from every column on this partition)，
-    *         其中，数组索引位置代表列索引
+   * @return 数据元素为：(分区索引, 频率数组)，其中，频率数组索引位置代表列索引
    */
   private def getColumnsFreqPerPartition(sortedValueColumnPairs: RDD[(Double, Int)], numOfColumns : Int): Array[(Int, Array[Long])] = {
     val zero = Array.fill[Long](numOfColumns)(0)
 
-    def aggregateColumnFrequencies(
-      partitionIndex: Int, valueColumnPairs: Iterator[(Double, Int)]): Iterator[(Int, Array[Long])] = {
+    def aggregateColumnFrequencies(partitionIndex: Int,
+                                   valueColumnPairs: Iterator[(Double, Int)]): Iterator[(Int, Array[Long])] = {
       val columnsFreq : Array[Long] = valueColumnPairs.aggregate(zero)(
         (a: Array[Long], v: (Double,Int)) => {
           val (value, colIndex) = v
-          a(colIndex) = a(colIndex) + 1L
+          a(colIndex) = a(colIndex) + 1L // 按列计数
           a
         },
         (a: Array[Long], b: Array[Long]) => {
@@ -121,8 +119,9 @@ object GoldilocksV3 {
       Iterator((partitionIndex, columnsFreq))
     }
 
-    sortedValueColumnPairs.mapPartitionsWithIndex(
-      aggregateColumnFrequencies).collect()
+    sortedValueColumnPairs
+      .mapPartitionsWithIndex(aggregateColumnFrequencies)
+      .collect()
   }
 
   /**
@@ -130,7 +129,7 @@ object GoldilocksV3 {
    * that are desired rank statistics
    *
    * For Example:
-   *    targetRanks: 5
+   *    ranks: 5
    *    partitionColumnsFreq: [(0, [2, 3]), (1, [4, 1]), (2, [5, 2])]
    *    numOfColumns: 2
    *
@@ -143,27 +142,30 @@ object GoldilocksV3 {
    *
    * @return  Array that contains
    *          (partition index, relevantIndexList)
-   *           Where relevantIndexList(i) = the index
-   *          of an element on this partition that matches one of the target ranks)
+   *           Where relevantIndexList(i) = (列索引，该分区中该列的第几个值)
+   *           the index of an element on this partition that matches one of the target ranks)
    */
-  private def getRanksLocationsWithinEachPart(targetRanks: List[Long],
-         partitionColumnsFreq: Array[(Int, Array[Long])],
-         numOfColumns : Int): Array[(Int, List[(Int, Long)])]  = {
-    val runningTotal = Array.fill[Long](numOfColumns)(0)
+  private def getRanksLocationsWithinEachPart(ranks: List[Long],
+                                              partitionColumnsFreq: Array[(Int, Array[Long])],
+                                              numOfColumns : Int): Array[(Int, List[(Int, Long)])]  = {
+    val runningTotal = Array.fill[Long](numOfColumns)(0) // 全局各列的计数器
 
+    /*
+     * 1. 先按值排序
+     * 2.
+     */
     partitionColumnsFreq.sortBy(_._1).map { case (partitionIndex, columnsFreq)=>
       val relevantIndexList = new mutable.MutableList[(Int, Long)]()
 
       columnsFreq.zipWithIndex.foreach{ case (colCount, colIndex)  =>
         val runningTotalCol = runningTotal(colIndex)
-
-        val ranksHere: List[Long] = targetRanks.filter(rank =>
+        // 对于某列，哪些排名在这个分区当中
+        val ranksHere: List[Long] = ranks.filter(rank =>
           runningTotalCol < rank && runningTotalCol + colCount >= rank)
+        // 对于某列，命中的排名数据位置
+        relevantIndexList ++= ranksHere.map(rank => (colIndex, rank - runningTotalCol))
 
-        relevantIndexList ++= ranksHere.map(
-          rank => (colIndex, rank - runningTotalCol))
-
-        runningTotal(colIndex) += colCount
+        runningTotal(colIndex) += colCount // 全局该列的计数累加
       }
 
       (partitionIndex, relevantIndexList.toList)
@@ -180,13 +182,14 @@ object GoldilocksV3 {
     *
     * @return returns RDD of the target ranks (column index, value)
     */
-  private def findTargetRanksIteratively(
-          sortedValueColumnPairs: RDD[(Double, Int)],
-          ranksLocations: Array[(Int, List[(Int, Long)])]): RDD[(Int, Double)] = {
+  private def findTargetRanksIteratively(sortedValueColumnPairs: RDD[(Double, Int)],
+                                         ranksLocations: Array[(Int, List[(Int, Long)])]): RDD[(Int, Double)] = {
+    // 分区内进行
     sortedValueColumnPairs.mapPartitionsWithIndex(
       (partitionIndex : Int, valueColumnPairs : Iterator[(Double, Int)]) => {
         val targetsInThisPart: List[(Int, Long)] = ranksLocations(partitionIndex)._2
         if (targetsInThisPart.nonEmpty) {
+          // 各列对应的排名索引位置
           val columnsRelativeIndex: Map[Int, List[Long]] = targetsInThisPart.groupBy(_._1).mapValues(_.map(_._2))
 
           val columnsInThisPart = targetsInThisPart.map(_._1).distinct
@@ -194,9 +197,10 @@ object GoldilocksV3 {
           val runningTotals: mutable.HashMap[Int, Long]= new mutable.HashMap()
           runningTotals ++= columnsInThisPart.map(columnIndex => (columnIndex, 0L)).toMap
 
+          // 对每个(value, colIndex)对进行判断
           valueColumnPairs.filter{ case(value, colIndex) =>
             lazy val thisPairIsTheRankStatistic: Boolean = {
-              val total = runningTotals(colIndex) + 1L
+              val total = runningTotals(colIndex) + 1L // 命中列计数器递增1
               runningTotals.update(colIndex, total)
 
               columnsRelativeIndex(colIndex).contains(total)
