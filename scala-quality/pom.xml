@@ -21,6 +21,22 @@
         <maven.version>3.6.1</maven.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+
+        <sonar.projectName>[Demo] Scala Quality</sonar.projectName>
+        <sonar.projectKey>demo-scala-quality</sonar.projectKey>
+        <sonar.sources>src/main/scala,src/main/java</sonar.sources>
+        <sonar.tests>src/test/scala,src/test/java</sonar.tests>
+        <sonar.junit.reportsPath>target/surefire-reports</sonar.junit.reportsPath>
+        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+        <sonar.scala.version>${scala.binary.version}</sonar.scala.version>
+        <sonar.scala.scoverage.reportPath>${project.build.directory}/scoverage.xml</sonar.scala.scoverage.reportPath>
+        <sonar.host.url>http://localhost</sonar.host.url>
+
+        <!-- Sonar Java properties -->
+        <sonar.java.binaries>target/scoverage-classes</sonar.java.binaries>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>
+        <sonar.exclusions>src/test/**</sonar.exclusions>
     </properties>
 
     <repositories>
@@ -219,6 +235,12 @@
                         </execution>
                     </executions>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>3.7.0.1746</version>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -230,6 +252,30 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.scalastyle</groupId>
+                <artifactId>scalastyle-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <verbose>false</verbose>
+                    <failOnViolation>true</failOnViolation>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <failOnWarning>false</failOnWarning>
+                    <sourceDirectory>${project.basedir}/src/main/scala</sourceDirectory>
+                    <testSourceDirectory>${project.basedir}/src/test/scala</testSourceDirectory>
+                    <configLocation>${project.basedir}/style/scalastyle_config.xml</configLocation>
+                    <outputFile>${project.basedir}/target/scalastyle-output.xml</outputFile>
+                    <outputEncoding>UTF-8</outputEncoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
