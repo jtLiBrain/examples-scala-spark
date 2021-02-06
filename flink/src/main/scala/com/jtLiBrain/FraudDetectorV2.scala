@@ -41,6 +41,7 @@ class FraudDetectorV2 extends KeyedProcessFunction[Long, Transaction, Alert] {
     timerState = getRuntimeContext.getState(timerDescriptor)
   }
 
+  // 每个事件都被触发该方法的调用
   @throws[Exception]
   def processElement(
       transaction: Transaction,
