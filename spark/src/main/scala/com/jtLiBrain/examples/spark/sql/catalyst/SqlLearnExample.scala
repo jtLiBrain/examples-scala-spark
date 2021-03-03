@@ -84,22 +84,8 @@ object SqlExample {
         |) tmp
         |""".stripMargin
     val sqlDF = sparkSession.sql(sql)
-    sqlDF.show(10, false)
+    sqlDF.take(1).foreach(r => println(r.get(0).toString))
     println(sqlDF.queryExecution)
-    sqlDF.explain()
-    println("======= 1 ==========")
-
-    /*val joinedDF = studentDF.join(scoreDF, $"studentId" === $"id")
-      .filter($"age" < 30)
-      .select(
-        $"id", (lit(10) + lit(10) + $"score").alias("total")
-      )
-      .agg(sum($"total"))
-
-    println(joinedDF.queryExecution.toString()) // 等价于joinedDF.explain(true)
-    println("======= 2 ==========")
-    joinedDF.show()
-    joinedDF.printSchema()*/
 
     sparkSession.stop()
   }
