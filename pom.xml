@@ -43,7 +43,7 @@
         <scalaj.version>2.4.1</scalaj.version>
         <mysql.jdbc.version>5.1.47</mysql.jdbc.version>
         <jedis.version>3.0.1</jedis.version>
-        <fastjson.version>1.2.58</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <hikariCP.version>3.3.1</hikariCP.version>
         <kafka.version>2.0.0</kafka.version>
         <zkclient.version>0.11</zkclient.version>
